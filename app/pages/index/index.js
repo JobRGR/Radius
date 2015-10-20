@@ -10,7 +10,7 @@ const Index = React.createClass({
 
   render() {
     return (
-      <Map center={position} zoom={13}>
+      <Map center={position} zoom={13} style={{width: '100%', height: '100%'}}>
         <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
