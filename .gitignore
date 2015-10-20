@@ -1,0 +1,12 @@
+*.log
+*.swp
+.DS_Store
+.idea
+.idea/
+/lib
+/.npmrc
+/aws_keys.*
+/dist
+/node_modules
+/npm-debug.log
+/synclibs
