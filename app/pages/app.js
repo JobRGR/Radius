@@ -1,14 +1,13 @@
 import React from 'react'
-import {Link, RouteHandler} from 'react-router'
 import Header from '../components/header'
 
-let App = React.createClass({
+const App = React.createClass({
 
   render() {
     return (
       <div>
         <Header />
-        <RouteHandler />
+        {this.props.children}
       </div>
     )
   }

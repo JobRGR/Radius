@@ -1,14 +1,14 @@
 import React from 'react'
-import {addons} from 'react/addons'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {Link} from 'react-router'
 
 let Header = React.createClass({
-  mixins: [addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
 
   render() {
     return (
       <div className='header'>
-        <Link to="index" className='title'>Radius</Link>
+        <Link to='/' className='title'>Radius</Link>
       </div>
     )
   }

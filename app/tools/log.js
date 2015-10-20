@@ -1,3 +1,3 @@
-export default (text) => {
+export default (...text) => {
   console.log(text)
 }

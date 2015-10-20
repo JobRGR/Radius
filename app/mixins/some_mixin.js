@@ -5,6 +5,6 @@ export default {
   mixins: [Navigation],
 
   componentWillMount() {
-    log(`props - ${this.props}`)
+    log('[this]:', this.props)
   }
 }
