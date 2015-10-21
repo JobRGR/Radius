@@ -71,7 +71,7 @@ gulp.task('images', function(cb) {
 })
 
 gulp.task('watch', function() {
-  gulp.watch(app + '/**/*.styl', ['styles'])
+  gulp.watch(app + '**/*.styl', ['styles'])
   gulp.watch(app + 'index.html', ['html'])
   gulp.watch(app + '**/*.js', ['scripts'])
   gulp.watch(app + '**/*.jsx', ['scripts'])

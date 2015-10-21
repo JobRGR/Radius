@@ -7,7 +7,7 @@ let Header = React.createClass({
 
   render() {
     return (
-      <div className='header'>
+      <div className='menu'>
         <Link to='/' className='title'>Radius</Link>
       </div>
     )
