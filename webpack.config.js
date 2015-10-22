@@ -1,7 +1,7 @@
 module.exports.getConfig = function(type) {
   var isDev = type === 'development'
   var config = {
-    entry: './app/app.js',
+    entry: './app/client/index.js',
     output: {
       path: __dirname,
       filename: 'bundle.js'
