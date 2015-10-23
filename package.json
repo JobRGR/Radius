@@ -2,7 +2,7 @@
   "name": "RadiusApp",
   "main": "index.html",
   "scripts": {
-    "start": "./node_modules/.bin/gulp --port 3333"
+    "start": "./node_modules/.bin/gulp"
   },
   "devDependencies": {
     "babel-core": "^4.7.0",
@@ -28,6 +28,7 @@
   "dependencies": {
     "body-parser": "^1.14.1",
     "connect-livereload": "^0.5.3",
+    "express": "^4.13.3",
     "isomorphic-fetch": "^2.1.1",
     "leaflet": "^0.7.5",
     "mongoose": "^4.2.0",
