@@ -26,6 +26,7 @@
     "webpack": "^1.7.3"
   },
   "dependencies": {
+    "async": "^1.4.2",
     "body-parser": "^1.14.1",
     "connect-livereload": "^0.5.3",
     "isomorphic-fetch": "^2.1.1",

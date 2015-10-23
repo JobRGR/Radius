@@ -7,8 +7,9 @@ module.exports = function() {
   var api = express.Router()
 
   api.get('/area', handler.area)
-  api.get('/area/tower', handler.tower)
-  api.get('/area/bgp', handler.bgp)
+  api.get('/area/:id', handler.points)
+  api.get('/tower/:id', handler.tower)
+  api.get('/bgp/:id', handler.bgp)
 
   app.use('/api', api)
 
