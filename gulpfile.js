@@ -9,7 +9,6 @@ var environment = $.util.env.type || 'development'
 var isProduction = environment === 'production'
 var webpackConfig = require('./webpack.config.js').getConfig(environment)
 
-var port = $.util.env.port || 1337
 var app = 'app/client/'
 var dist = 'dist/'
 
@@ -80,6 +79,5 @@ gulp.task('clean', function(cb) {
 gulp.task('build', ['clean'], function(){
   gulp.start(['images', 'html','scripts','styles'])
 })
-
 
 gulp.task('default', ['build', 'server', 'watch'])
