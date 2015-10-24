@@ -35,7 +35,25 @@ exports.points = function(req, res, next) {
       Tower.getValues(id, callback)
     }
   }, function (err, result) {
+    if (err) next(err)
     res.send({bgp: result.bgp, tower: result.tower})
+  })
+}
+
+exports.all = function(req, res, next) {
+  async.series({
+    area: function(callback) {
+      Area.getValues(null, callback)
+    },
+    bgp: function(callback) {
+      BGP.getValues(null, callback)
+    },
+    tower: function(callback) {
+      Tower.getValues(null, callback)
+    }
+  }, function (err, result) {
+    if (err) next(err)
+    res.send({bgp: result.bgp, tower: result.tower, area: result.area})
   })
 }
 

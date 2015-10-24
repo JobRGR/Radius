@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
+var uri = require('./config').uri
 
-var uri = "mongodb://localhost/radius"
 var options = {
   options: {
     server: {
@@ -10,7 +10,6 @@ var options = {
     }
   }
 }
-
 
 mongoose.connect(uri, options)
 module.exports = mongoose

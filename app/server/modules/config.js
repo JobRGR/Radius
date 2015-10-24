@@ -12,3 +12,7 @@ exports.point = {
       required: true
   }
 }
+
+exports.uri = "mongodb://localhost/radius"
+exports.key = "AIzaSyCDlFvMWmOX7sXnlc8xi-aQJD-CeL0flj0"
+

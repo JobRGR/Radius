@@ -5,15 +5,17 @@ var handler = require('../handler/api')
 module.exports = function() {
   var app = express()
   var api = express.Router()
+    .get('/area', handler.area)
+    .get('/area/:id', handler.points)
+    .get('/tower/:id', handler.tower)
+    .get('/tower', handler.tower)
+    .get('/bgp/:id', handler.bgp)
+    .get('/bgp', handler.bgp)
+    .get('/all', handler.all)
 
-  api.get('/area', handler.area)
-  api.get('/area/:id', handler.points)
-  api.get('/tower/:id', handler.tower)
-  api.get('/bgp/:id', handler.bgp)
-
-  app.use('/api', api)
-
-  app.get('/', render.get)
+  app
+    .use('/api', api)
+    .get('/', render.get)
 
   return app
 }
