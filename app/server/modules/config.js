@@ -1,18 +1,2 @@
-exports.point = {
-  latitude: {
-    type: Number,
-      required: true
-  },
-  longitude: {
-    type: Number,
-      required: true
-  },
-  radius: {
-    type: Number,
-      required: true
-  }
-}
-
 exports.uri = "mongodb://localhost/radius"
-exports.key = "AIzaSyCDlFvMWmOX7sXnlc8xi-aQJD-CeL0flj0"
-
+exports.key = "AIzaSyCawkI3y1CdGUjJnBH9x52Oqi8eU6Fw6as"
