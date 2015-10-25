@@ -1,28 +1,41 @@
 var async = require('async')
-var mongoose = require('../index'),
-  point = require('../config').point,
-  Schema = mongoose.Schema;
+var mongoose = require('../index')
+var Schema = mongoose.Schema
 
-point.area = {
-  type: Number,
-  required: true
-}
+var schema = new Schema({
+  area: {
+    type: String,
+    unique: false,
+    required: true
+  },
+  lat: {
+    type: Number,
+    unique: false,
+    required: true
+  },
+  lng: {
+    type: Number,
+    unique: false,
+    required: true
+  },
+  radius: {
+    type: Number,
+    unique: false,
+    required: true
+  }
+})
 
-var schema = new Schema(point)
-
-schema.statics.addValue = function(area, latitude, longitude, radius, callback) {
+schema.statics.addValue = function(area, lat, lng, radius, callback) {
   var Tower = this
-  Tower.find({latitude: latitude, longitude: longitude}, function(err, towers) {
-    if (towers) return callback(new Error('422 - Entity Already Exists'))
-    var tower = new Tower({
-      area: area,
-      latitude: latitude,
-      longitude: longitude,
-      radius: radius
-    })
-    tower.save(function(err) {
-      callback(err, area)
-    })
+  var tower = new Tower({
+    area: area,
+    lat: lat,
+    lng: lng,
+    radius: radius,
+    name: Date.now() + Math.random() * Math.random()
+  })
+  tower.save(function(err) {
+    callback(err, tower)
   })
 }
 

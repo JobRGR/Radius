@@ -1,34 +1,43 @@
 var async = require('async')
-var mongoose = require('../index'),
-  point = require('../config').point,
-  Schema = mongoose.Schema;
+var mongoose = require('../index')
+var Schema = mongoose.Schema
 
-point.areas = {
-  type: [Number],
-  required: true
-}
 
-var schema = new Schema(point)
+var schema = new Schema({
+  area: {
+    type: String,
+    required: true
+  },
+  lat: {
+    type: Number,
+    required: true
+  },
+  lng: {
+    type: Number,
+    required: true
+  },
+  radius: {
+    type: Number,
+    required: true
+  }
+})
 
-schema.statics.addValue = function(areas, latitude, longitude, radius, callback) {
+schema.statics.addValue = function(area, lat, lng, radius, callback) {
   var BGP = this
-  BGP.find({latitude: latitude, longitude: longitude}, function(err, bgps) {
-    if (bgps) return callback(new Error('422 - Entity Already Exists'))
-    var bgp = new BGP({
-      area: areas,
-      latitude: latitude,
-      longitude: longitude,
-      radius: radius
-    })
-    bgp.save(function(err) {
-      callback(err, area)
-    })
+  var bgp = new BGP({
+    area: area,
+    lat: lat,
+    lng: lng,
+    radius: radius
+  })
+  bgp.save(function(err) {
+    callback(err, bgp)
   })
 }
 
 schema.statics.getValues = function(id, callback) {
   var BGP = this
-  var query = id ? {areas: id} : {}
+  var query = id ? {area: id} : {}
   BGP.find(query, callback)
 }
 
