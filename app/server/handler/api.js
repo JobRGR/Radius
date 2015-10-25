@@ -41,19 +41,31 @@ exports.points = function(req, res, next) {
 }
 
 exports.all = function(req, res, next) {
-  async.series({
-    area: function(callback) {
-      Area.getValues(null, callback)
+  async.waterfall([
+    function (cb) {
+      Area.getValues(null, cb)
     },
-    bgp: function(callback) {
-      BGP.getValues(null, callback)
+    function (areas, cb) {
+      async.reduce(areas, [], function(memo, item, callback) {
+        Tower.getValues(item._id, function(err, towers) {
+          item._doc.towers = towers || []
+          memo.push(item)
+          callback(null, memo)
+        })
+      }, cb)
     },
-    tower: function(callback) {
-      Tower.getValues(null, callback)
+    function (areas, cb) {
+      async.reduce(areas, [], function(memo, item, callback) {
+        BGP.getValues(item._id, function(err, bgps) {
+          item._doc.bgps = bgps || []
+          memo.push(item)
+          callback(null, memo)
+        })
+      }, cb)
     }
-  }, function (err, result) {
+  ], function(err, area) {
     if (err) next(err)
-    res.send({bgp: result.bgp, tower: result.tower, area: result.area})
+    res.send({areas: area})
   })
 }
 

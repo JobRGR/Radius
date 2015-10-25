@@ -96,7 +96,7 @@ async.waterfall([
         lat = state.location.lat
       if (!area || !lat || !lng) return next()
       var towers = []
-      for (var i = 0; i <= 40; i++) {
+      for (var i = 0; i < 40; i++) {
         var isMore = Math.random() - Math.random() > 0 ? 0.1 : -0.1
         towers.push({
           area: area,
@@ -122,7 +122,7 @@ async.waterfall([
 
         if (!area || !northeast || !southwest) return next()
         var bgps = ['east', 'west', 'north', 'south'].reduce(function(res, item) {
-          for (var i = 0; i <= 5; i++) {
+          for (var i = 0; i < 5; i++) {
             res.push({
               area: area,
               lng: lat(item, i),
