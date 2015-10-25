@@ -1,4 +1,5 @@
 var fs = require('fs')
+var path = require('path')
 
 var async = require('async')
 var key = require('../config').key
@@ -50,10 +51,10 @@ async.waterfall([
     BGB.removeValues(cb)
   },
   function (err, cb) {
-    var path = './state.json'
-    var isState = fs.existsSync(path)
+    var cur = path.resolve(__dirname, 'state.json')
+    var isState = fs.existsSync(cur)
     if (isState) {
-      var data = fs.readFileSync(path)
+      var data = fs.readFileSync(cur)
       return cb(null, JSON.parse(data).state)
     }
     async.map(states, function(state, callback) {
@@ -72,7 +73,7 @@ async.waterfall([
   },
   function (data, cb) {
     var json = JSON.stringify({state: data}, null, "\t")
-    fs.writeFile('state.json', json, 'utf8', next)
+    fs.writeFile(path.resolve(__dirname, 'state.json'), json, 'utf8', next)
     function next() {
       cb(null, data)
     }
