@@ -2,8 +2,7 @@
   "name": "RadiusApp",
   "main": "index.html",
   "scripts": {
-    "start": "./node_modules/.bin/gulp",
-    "db": "node ./app/server/modules/init"
+    "start": "./node_modules/.bin/gulp"
   },
   "devDependencies": {
     "babel-core": "^4.7.0",
