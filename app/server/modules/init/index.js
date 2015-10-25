@@ -42,15 +42,19 @@ var states = [
 
 async.waterfall([
   function (cb) {
+    console.log('Clean Areas')
     Area.removeValues(cb)
   },
   function (err, cb) {
+    console.log('Clean Towers')
     Tower.removeValues(cb)
   },
   function (err, cb) {
+    console.log('Clean BGPs')
     BGB.removeValues(cb)
   },
   function (err, cb) {
+    console.log('Load States')
     var cur = path.resolve(__dirname, 'state.json')
     var isState = fs.existsSync(cur)
     if (isState) {
@@ -72,6 +76,7 @@ async.waterfall([
     }, cb)
   },
   function (data, cb) {
+    console.log('Save States')
     var json = JSON.stringify({state: data}, null, "\t")
     fs.writeFile(path.resolve(__dirname, 'state.json'), json, 'utf8', next)
     function next() {
@@ -79,6 +84,7 @@ async.waterfall([
     }
   },
   function (data, cb) {
+    console.log('Save Areas')
     async.map(data, function(state, callback) {
       var name = state.name,
         lng = state.location.lng,
@@ -90,6 +96,7 @@ async.waterfall([
     }, cb)
   },
   function (data, cb) {
+    console.log('Save Towers')
     async.map(data, function(state, callback) {
       var area = state.id,
         lng = state.location.lng,
@@ -115,6 +122,7 @@ async.waterfall([
       }
     }, cb)
   }, function(data, cb) {
+      console.log('Save BGPs')
       async.map(data, function(state, callback) {
         var area = state.id,
           northeast = state.viewport.northeast,
