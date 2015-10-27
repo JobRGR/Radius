@@ -43,58 +43,52 @@ export default React.createClass({
     //  this.refs.map.getLeafletElement().setView(newPos);
     //}
    },
-  componentDidMount: function() {
-
-    var MAP = this.refs.map.getLeafletElement();
-    var parameters = {
+  bLine(A, B, param){
+    let MAP = this.refs.map.getLeafletElement();
+    let line = new L.Polyline([A, B], param);
+    line.addTo(MAP);
+    return line;
+  },
+  count (pointA, pointB, dt, time) {
+    return [
+      pointA.lat + (pointB.lat - pointA.lat) * dt / time,
+      pointA.lng + (pointB.lng - pointA.lng) * dt / time
+    ]
+  },
+  drawLineWithTransition(pointA, pointB, startTime, time, oldLine){
+    const parameters = {
       color: 'red',
       weight: 3,
       opacity: 1,
       smoothFactor: 1
     };
+    let MAP = this.refs.map.getLeafletElement();
+    const now = Date.now();
+    const dt = now - startTime;
+    const [newLat, newLng] = this.count(pointA,pointB,dt,time);
+    const newA = new L.LatLng(newLat, newLng);
+    const isBusted = (
+        (newLat>pointA.lat && newLat>pointB.lat)
+        || (newLat<pointA.lat && newLat<pointB.lat)
+        || (newLng>pointA.lng && newLng>pointB.lng)
+        || (newLng<pointA.lng && newLng<pointB.lng)
+    );
+    if (oldLine != undefined) MAP.removeLayer(oldLine);
+    if (isBusted) return this.bLine(pointA,pointB,parameters);
+    const newLine = this.bLine(pointA, newA, parameters);
+    setTimeout(() => this.drawLineWithTransition(pointA, pointB, startTime, time, newLine),20);
+  },
+  drawPolylineWithTransition(points, transition){
+    if (points.length <= 1) return;
+    const now = Date.now();
+    this.drawLineWithTransition(points[0],points[1],now,transition);
+    points.shift();
+    setTimeout(() => this.drawPolylineWithTransition(points, transition),transition);
+  },
+  componentDidMount() {
 
-    function bLine(A,B,param){
-      var line = new L.Polyline([A, B], param);
-      line.addTo(MAP);
-      return line;
-    }
+    let points = [[48,33], [49,35], [44,37], [46,39], [51,42], [50,37]].map(([x, y]) => new L.LatLng(x, y));
 
-    function drawLineWithTransition(pointA, pointB, startTime, time, oldLine){
-      var now = new Date().getTime();
-      var dt = now-startTime;
-
-      var newLat = pointA.lat + (pointB.lat - pointA.lat) * dt / time;
-      var newLng = pointA.lng + (pointB.lng - pointA.lng) * dt / time;
-      var newA = new L.LatLng(newLat, newLng);
-
-      if (oldLine != undefined) MAP.removeLayer( oldLine );
-
-      if (newLat>pointA.lat && newLat>pointB.lat) {bLine(pointA,pointB,parameters);return;}
-      if (newLat<pointA.lat && newLat<pointB.lat) {bLine(pointA,pointB,parameters);return;}
-      if (newLng>pointA.lng && newLng>pointB.lng) {bLine(pointA,pointB,parameters);return;}
-      if (newLng<pointA.lng && newLng<pointB.lng) {bLine(pointA,pointB,parameters);return;}
-
-      var newLine = bLine(pointA, newA, parameters);
-
-      setTimeout(function(){drawLineWithTransition(pointA, pointB, startTime, time, newLine);},20);
-    }
-
-    function drawPolylineWithTransition(points, transition){
-      if (points.length <= 1) return;
-      drawLineWithTransition(points[0],points[1],new Date().getTime(),transition);
-      points.splice(0, 1);
-      setTimeout(function(){drawPolylineWithTransition(points, transition)},transition);
-    }
-
-    var pointA = new L.LatLng(48, 33);
-    var pointB = new L.LatLng(49, 35);
-    var pointC = new L.LatLng(44, 37);
-    var pointD = new L.LatLng(46, 39);
-    var pointE = new L.LatLng(51, 42);
-    var pointF = new L.LatLng(50, 37);
-
-    drawPolylineWithTransition([pointA, pointB, pointC, pointD, pointE, pointF],2000);
-    //firstpolyline.addTo(this.refs.map.getLeafletElement());
-
+    this.drawPolylineWithTransition(points,500);
   }
 })
