@@ -2,37 +2,42 @@ import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
 import SameMixin from '../../mixins/some_mixin'
-import $ from 'jquery'
+import MapService from '../../services/map'
 
 const position = [48.5, 32.0];
 const zoom = 6;
 
 export default React.createClass({
     mixins: [PureRenderMixin, SameMixin],
+
     getInitialState: function(){
         return {
-            towers: [],
-            visibility: []
+            visibility: [],
+            towers: []
         };
     },
-    componentDidMount: function() {
-        $.getJSON('/api/tower', function(result) {
-            result = result.tower;
-            result = [result[0], result[100], result[200], result[300], result[400], result[500], result[600], result[700], result[800], result[900]];
-            this.setState({
-                towers: result,
-                visibility: result.map(()=>{return false})
-            });
-        }.bind(this));
+
+    componentWillReceiveProps: function(nextProps){
+        let towers = nextProps.areas.map((area)=> {
+            return area.towers
+        }).reduce((arr, cur)=> {
+            return arr.concat(cur)
+        })
+        towers = [towers[0], towers[100], towers[200], towers[300], towers[400], towers[500], towers[600], towers[700], towers[800], towers[900]]
+        this.setState({
+            towers,
+            visibility: towers.map(()=>{return false})
+        })
     },
+
     handleMouseEnter: function(index){
-        debugger
         let v = this.state.visibility.map(function(vi, i){
             if (i == index) return true;
             return vi;
         });
         this.setState({visibility: v});
     },
+
     handleMouseLeave: function(index){
         let v = this.state.visibility.map(function(vi, i){
             if (i == index) return false;
@@ -40,8 +45,9 @@ export default React.createClass({
         });
         this.setState({visibility: v});
     },
+
     render() {
-        var towers = this.state.towers.map((tower, index)=>{
+        let towers = this.state.towers.map((tower, index)=>{
             let circleOpt={
                 key: tower._id + 'circle',
                 center: [tower.lat, tower.lng],

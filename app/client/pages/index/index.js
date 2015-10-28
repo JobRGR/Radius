@@ -10,13 +10,12 @@ const Index = React.createClass({
   mixins: [PureRenderMixin, SameMixin],
 
   getInitialState() {
-    return {area: MapService.area || []}
+    return {areas: MapService.areas || []}
   },
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.state.length) {
       MapService.onLoad((areas) => {
-        console.log(areas)
         this.setState({areas})
       })
     }
@@ -26,7 +25,7 @@ const Index = React.createClass({
     return (
       <div className='content'>
         <Menu />
-        <Map />
+        <Map areas={this.state.areas}/>
       </div>
     )
   }
