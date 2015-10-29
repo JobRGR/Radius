@@ -21,25 +21,22 @@ function getAdjList(areas){
 
   let adjList = {}
 
-  areas.forEach((area)=>{
-    let arr = [...area.towers, ...area.bgps]
-    arr.forEach((a)=>{
-      adjList[a._id] = arr.filter((b)=>{
-        return a._id != b._id && getDist(a, b) <= a.radius
-      }).map((b)=>{
-        return b._id
+  areas
+      .forEach((area)=>{
+        let arr = [...area.towers, ...area.bgps]
+        arr.forEach((a)=> {
+          adjList[a._id] = arr
+              .filter(b=>a._id != b._id && getDist(a, b) <= a.radius)
+              .map(b=>b._id)
+        })
       })
-    })
-  })
-  debugger
-  areas.reduce((arr, area)=>{
-    return arr.concat(area.bgps)
-  }, []).forEach((a)=>{
-    let arr = areas.filter((b)=>{
-      return a.area != b.area && getDist(a, b) <= a.radius
-    })
-    adjList[a._id].push(...arr)
-  })
+
+  areas
+      .reduce((arr, area)=>arr.concat(area.bgps), [])
+      .forEach((a)=>{
+        let arr = areas.filter(b=>a.area != b.area && getDist(a, b) <= a.radius)
+        adjList[a._id].push(...arr)
+      })
 
   return adjList
 }
