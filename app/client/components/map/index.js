@@ -19,7 +19,6 @@ export default React.createClass({
     },
 
     render() {
-
         return (
             <div className='map-container'>
                  <Map center={position} zoom={zoom} style={{width: '100%', height: '100%'}} ref='map'>

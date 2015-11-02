@@ -6,7 +6,6 @@ import Map from '../../components/map'
 import Menu from '../../components/menu'
 import getAdjList from '../../tools/buildGraph'
 
-
 const Index = React.createClass({
   mixins: [PureRenderMixin, SameMixin],
 
@@ -32,7 +31,7 @@ const Index = React.createClass({
   render() {
     return (
       <div className='content'>
-        <Menu />
+        <Menu/>
         <Map areas={this.state.areas} adjList={this.state.adjList}/>
       </div>
     )

@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
+import TowerService from '../services/tower'
 
 export default {
 
@@ -41,6 +42,10 @@ export default {
         })
     },
 
+    handleClick(tower){
+        TowerService.pick(tower);
+    },
+
     getTowerElements() {
 
         let GreenIcon = L.Icon.Default.extend({
@@ -73,7 +78,8 @@ export default {
                 position: [tower.lat, tower.lng],
                 icon: tower.type=='tower'?new BlueIcon():new GreenIcon(),
                 onMouseover: () => this.handleMouseEnter(index),
-                onMouseout: () => this.handleMouseLeave(index)
+                onMouseout: () => this.handleMouseLeave(index),
+                onClick: () => this.handleClick(tower)
             }
 
             return (
