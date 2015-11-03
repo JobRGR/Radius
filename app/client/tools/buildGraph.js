@@ -17,16 +17,16 @@ export default function getAdjList(areas){
     areas
         .forEach((area)=>{
             let arr = [...area.towers, ...area.bgps]
-            arr.forEach((a)=> {
+            arr.forEach(a => {
                 adjList[a._id] = arr
-                    .filter(b=>a._id != b._id && getDist(a, b) <= a.radius)
-                    .map(b=>b._id)
+                    .filter(b => a._id != b._id && getDist(a, b) <= a.radius)
+                    .map(b => b._id)
             })
         })
 
     areas
         .reduce((arr, area)=>arr.concat(area.bgps), [])
-        .forEach((a)=>{
+        .forEach(a =>{
             let arr = areas.filter(b=>a.area != b.area && getDist(a, b) <= a.radius)
             adjList[a._id].push(...arr)
         })
