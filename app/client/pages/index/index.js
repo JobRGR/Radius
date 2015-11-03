@@ -2,6 +2,7 @@ import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import SameMixin from '../../mixins/some_mixin'
 import MapService from '../../services/map'
+import TowerService from '../../services/tower'
 import Map from '../../components/map'
 import Menu from '../../components/menu'
 import getAdjList from '../../tools/buildGraph'
@@ -12,7 +13,10 @@ const Index = React.createClass({
   getInitialState() {
     return {
       areas: MapService.areas || [],
-      adjList: getAdjList(MapService.areas) || {}
+      adjList: getAdjList(MapService.areas) || {},
+      currentTower: TowerService.currentTower || {},
+      startTower: TowerService.startTower || {},
+      finishTower: TowerService.finishTower || {}
     }
   },
 
@@ -25,14 +29,41 @@ const Index = React.createClass({
           adjList
         })
       })
+
+      TowerService.onTowerPick((currentTower) => {
+        this.setState({currentTower})
+      })
+
+      TowerService.onStartTowerPick((startTower) => {
+        this.setState({startTower})
+      })
+
+      TowerService.onFinishTowerPick((finishTower) => {
+        this.setState({finishTower})
+      })
     }
   },
 
   render() {
+
+    let menuOptions = {
+      currentTower: this.state.currentTower,
+      startTower: this.state.startTower,
+      finishTower: this.state.finishTower
+    }
+
+    let mapOptions = {
+      areas: this.state.areas,
+      adjList: this.state.adjList,
+      currentTower: this.state.currentTower,
+      startTower: this.state.startTower,
+      finishTower: this.state.finishTower
+    }
+
     return (
       <div className='content'>
-        <Menu/>
-        <Map areas={this.state.areas} adjList={this.state.adjList}/>
+        <Menu {...menuOptions}/>
+        <Map {...mapOptions}/>
       </div>
     )
   }

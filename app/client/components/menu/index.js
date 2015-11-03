@@ -4,47 +4,39 @@ import Mui from 'material-ui'
 import {Link} from 'react-router'
 import TowerService from '../../services/tower'
 
-
 const {AppBar, Card, Menu, MenuItem, RaisedButton} = Mui
 
 let Header = React.createClass({
     mixins: [PureRenderMixin],
-    getInitialState() {
-        return {
-            tower: {}
-        }
+
+
+    handleFinishClick() {
+        TowerService.finishPick(this.props.currentTower);
     },
 
-    componentDidMount() {
-        TowerService.onTowerPick((tower) => {
-            this.setState({tower})
-        })
-    },
-
-    handleClick() {
-        console.log('fired!')
+    handleStartClick() {
+        TowerService.startPick(this.props.currentTower);
     },
 
     render() {
-
-        let tower = this.state.tower;
-        let towerInfo = (
-            <div>
-                Lat:{tower.lat}
-                <br/>Lng:{tower.lng}
-            </div>)
-
         return (
-            <Card className='menu'>
-                <AppBar title='Radius'/>
-                    <RaisedButton label='Начальная вышка' secondary={true} fullWidth={true}>
-                    </RaisedButton>
-                    {towerInfo}
-                    <RaisedButton label='Конечная вышка' secondary={true} fullWidth={true}/>
-                    {towerInfo}
-                    <RaisedButton label='Текущая вышка' secondary={true} fullWidth={true} onClick={this.handleClick}/>
-                    {towerInfo}
-                </Card>
+            <div className="menu">
+                <div >
+                    <button onClick={this.handleStartClick}>Start tower</button>
+                    <br/>lat: {this.props.startTower.lat}
+                    <br/>lng: {this.props.startTower.lng}
+                </div>
+                <div>
+                    <button onClick={this.handleFinishClick}>Finish tower</button>
+                    <br/>lat: {this.props.finishTower.lat}
+                    <br/>lng: {this.props.finishTower.lng}
+                </div>
+                <div>
+                    Current tower:
+                    <br/>lat: {this.props.currentTower.lat}
+                    <br/>lng: {this.props.currentTower.lng}
+                </div>
+            </div>
         )
     }
 })
