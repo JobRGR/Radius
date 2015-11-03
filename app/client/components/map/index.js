@@ -1,28 +1,34 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet'
-import SameMixin from '../../mixins/some_mixin'
+import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
+import TowerMixin from '../../mixins/tower-handler'
+import MapService from '../../services/map'
 
-const position = [51.505, -0.09]
+
+const position = [48.5, 32.0];
+const zoom = 6;
 
 export default React.createClass({
-  mixins: [PureRenderMixin, SameMixin],
+    mixins: [PureRenderMixin, TowerMixin],
 
-  render() {
-    return (
-      <div className='map-container'>
-        <Map center={position} zoom={13} style={{width: '100%', height: '100%'}} ref='map'>
-          <TileLayer
-            url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker position={position}>
-            <Popup>
-              <span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-            </Popup>
-          </Marker>
-        </Map>
-      </div>
-    )
-  }
+    getInitialState() {
+        return {
+            towers: []
+        };
+    },
+
+    render() {
+        return (
+            <div className='map-container'>
+                 <Map center={position} zoom={zoom} style={{width: '100%', height: '100%'}} ref='map'>
+                     <TileLayer
+                         url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                     />
+                    {this.getTowerElements()}
+                </Map>
+            </div>
+        )
+    }
 })
