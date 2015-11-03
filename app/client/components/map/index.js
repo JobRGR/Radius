@@ -15,7 +15,7 @@ export default React.createClass({
     getInitialState() {
         return {
             towers: []
-        };
+        }
     },
 
     render() {
