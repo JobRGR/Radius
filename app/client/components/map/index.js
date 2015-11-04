@@ -65,6 +65,7 @@ export default React.createClass({
     componentDidUpdate(){
         let tmpPoints = []
         for (let i = 0; i < 5; i++) tmpPoints.push(this.state.towers[parseInt(Math.random() * 100)])
+        tmpPoints = tmpPoints.sort((a, b) => a.lng > b.lng)
         let points = [this.props.startTower, ...tmpPoints, this.props.finishTower].map(({lat, lng}) => ({lat, lng}))
         let check = points.filter(({lat, lng}) => !lat || !lng)
         if (check.length) {
