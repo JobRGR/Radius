@@ -133,8 +133,8 @@ async.waterfall([
           for (var i = 0; i < 5; i++) {
             res.push({
               area: area,
-              lng: lat(item, i),
-              lat: lng(item, i),
+              lng: lng(item, i),
+              lat: lat(item, i),
               radius: Math.random() * 85000
             })
           }
