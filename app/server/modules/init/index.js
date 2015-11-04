@@ -107,8 +107,8 @@ async.waterfall([
         var isMore = Math.random() - Math.random() > 0 ? 0.1 : -0.1
         towers.push({
           area: area,
-          lng: lng + Math.random() * isMore,
-          lat: lat + Math.random() * isMore * -1,
+          lng: lng + Math.random() * isMore * 4,
+          lat: lat + Math.random() * isMore * -1 * 4,
           radius: Math.random() * 55000
         })
       }
