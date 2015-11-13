@@ -27,7 +27,7 @@ let Header = React.createClass({
     render() {
         return (
             <Card className='menu'>
-                <AppBar title='Radius' iconElementRight={<FlatButton label="START"/>}/>
+                <AppBar title='Radius' iconElementRight={<FlatButton onClick={this.props.handleRoad} label="START"/>}/>
                 <div className='tower-header'>
                     Выбор вышек
                 </div>

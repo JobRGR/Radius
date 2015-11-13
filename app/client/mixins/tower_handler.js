@@ -7,39 +7,28 @@ import TowerService from '../services/tower'
 export default {
 
     componentWillReceiveProps(nextProps) {
-
         let towers = nextProps.areas
             .map(area => area.towers)
             .reduce((arr, cur) => arr.concat(cur))
-            .filter((tower, index) => index%10==0)
-
+            .filter((tower, index) => index%10 == 0)
         let bgps = nextProps.areas
             .map(area => area.bgps)
             .reduce((arr, cur) => arr.concat(cur))
-            .filter((bgp, index) => index%10==0)
-
+            .filter((bgp, index) => index%10 == 0)
         towers.forEach(tower => {tower.type='tower'})
         bgps.forEach(bgp => {bgp.type='bgp'})
-
         towers.push(...bgps)
-
         this.setState({towers})
     },
 
     handleMouseEnter(index) {
         let circle = this.refs[`circle${index}`].getLeafletElement()
-        circle.setStyle({
-            opacity: 1,
-            fillOpacity: 0.2
-        })
+        circle.setStyle({opacity: 1, fillOpacity: 0.2})
     },
 
     handleMouseLeave(index) {
         let circle = this.refs[`circle${index}`].getLeafletElement()
-        circle.setStyle({
-            opacity: 0,
-            fillOpacity: 0
-        })
+        circle.setStyle({opacity: 0, fillOpacity: 0})
     },
 
     handleClick(tower){
@@ -47,19 +36,10 @@ export default {
     },
 
     getTowerElements() {
-
-        let GreenIcon = L.Icon.Default.extend({
-            options:{
-                iconUrl: 'images/components/map/marker-icon-green.png'
-            }
-        })
-
-        let BlueIcon = L.Icon.Default;
-
-
-        let towers = this.state.towers.map((tower, index) => {
+        const GreenIcon = L.Icon.Default.extend({options:{iconUrl: 'images/components/map/marker-icon-green.png'}})
+        const BlueIcon = L.Icon.Default;
+        return this.state.towers.map((tower, index) => {
             let color = tower.type=='tower'?'#0000ff':'#00ff00'
-
             let circleOpt = {
                 key: `circle${tower.id}`,
                 ref: `circle${index}`,
@@ -71,7 +51,6 @@ export default {
                 opacity: 0,
                 fillOpacity: 0
             }
-
             let markerOpt = {
                 key: `marker${tower.id}`,
                 ref: `marker${index}`,
@@ -81,23 +60,20 @@ export default {
                 onMouseout: () => this.handleMouseLeave(index),
                 onClick: () => this.handleClick(tower)
             }
-
             return (
-                <LayerGroup>
-                    <Marker {...markerOpt}>
-                        <Popup>
+              <LayerGroup>
+                  <Marker {...markerOpt}>
+                      <Popup>
                             <span>
                             lat: {tower.lat.toFixed(4)}
                                 <br/>lng: {tower.lng.toFixed(4)}
                             </span>
-                        </Popup>
-                    </Marker>
-                    <Circle {...circleOpt}/>
-                </LayerGroup>
+                      </Popup>
+                  </Marker>
+                  <Circle {...circleOpt}/>
+              </LayerGroup>
             )
-        })
-
-        return towers;
+        });
     }
 
 }
