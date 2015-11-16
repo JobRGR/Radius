@@ -55,6 +55,7 @@ const Index = React.createClass({
     }
 
     let mapOptions = {
+      ref: 'map',
       areas: this.state.areas,
       adjList: this.state.adjList,
       currentTower: this.state.currentTower,
