@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
 import TowerMixin from '../../mixins/tower_handler'
-import {Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup} from 'react-leaflet'
-import TowerMixin from '../../mixins/tower_handler'
 import DrawRoadMixin from '../../mixins/draw_road'
 import MapService from '../../services/map'
 import 'leaflet.markercluster'
@@ -22,12 +20,14 @@ export default React.createClass({
         return {towers: []}
     },
     numById(id) {
+        if (typeof id === 'object') return; //todo что это за объект?
         for (let i = 0; i<this.state.towers.length; ++i)
             if (this.state.towers[i]._id == id) return i;
     },
     objById(id) {
+        if (typeof id === 'object') return;//todo что это за объект?
+
         for (let i = 0; i<this.state.towers.length; ++i){
-            console.log('We have ',this.state.towers[i]._id, ' with number', i);
             if (this.state.towers[i]._id == id) return this.state.towers[i];
         }
 
@@ -38,23 +38,26 @@ export default React.createClass({
             const INF = 999999999999;
             let n = this.state.towers.length;
             let s = this.numById(this.props.startTower._id);
-            let e = this.numById(this.props.finishTower._id);
+            let t = this.numById(this.props.finishTower._id);
             let g = [];
+            let p = [];
 
-            let ind1 = 0;
             for (var key1 in this.props.adjList){
-                const objA = this.objById(this.props.startTower._id);
+                const objA = this.objById(key1);
                 const pointA = {lat: objA.lat, lng: objA.lng};
+                const ind1 = this.numById(key1);
                 g[ind1] = [];
                 for (var key2 in this.props.adjList[key1]){
-                    console.log('We need ',this.props.adjList[key1][key2]);
                     const objB = this.objById(this.props.adjList[key1][key2]);
-                    const pointB = {lat: objB.lat, lng: objB.lng};
-                    const el = {num : this.numById(this.props.adjList[key1][key2]), val:this.distance(pointA, pointB)};
-                    g[ind1].push(el);
+                    if (objB != undefined) {
+                        const pointB = {lat: objB.lat, lng: objB.lng};
+                        const el = {
+                            num: this.numById(this.props.adjList[key1][key2]),
+                            val: this.distance(pointA, pointB)
+                        };
+                        g[ind1].push(el);
+                    }
                 }
-
-                ind1++;
             }
 
             let d = [], u = [];
@@ -63,7 +66,7 @@ export default React.createClass({
                 u[i] = 0;
             }
 
-            dist[s] = 0;
+            d[s] = 0;
 
             for (let i=0; i<n; ++i) {
                 let v = -1;
@@ -75,9 +78,9 @@ export default React.createClass({
                 u[v] = true;
 
 
-                for (let j=0; j<g[v].size(); ++j) {
-                    let to = g[v][j].first,
-                        len = g[v][j].second;
+                for (let j=0; j<g[v].length; ++j) {
+                    let to = g[v][j].num,
+                        len = g[v][j].val;
                     if (d[v] + len < d[to]) {
                         d[to] = d[v] + len;
                         p[to] = v;
@@ -85,20 +88,29 @@ export default React.createClass({
                 }
             }
 
-            let path;
-            for (let v=t; v!=s; v=p[v])
-            path.push (v);
-            path.push (s);
-
-
-            let tmpPoints = []
-            for (let i = 0; i < 10; i++) tmpPoints.push(this.state.towers[parseInt(Math.random() * 100)])
-            tmpPoints = tmpPoints.sort((a, b) => a.lng > b.lng)
-            let points = [this.props.startTower, ...tmpPoints, this.props.finishTower].map(({lat, lng}) => ({lat, lng}))
-            let check = points.filter(({lat, lng}) => !lat || !lng)
-            if (check.length) {
-                return null
+            let path=[];
+            if (d[t]!=INF) {
+                for (let v=t; v!=s; v=p[v]) path.push (v);
+                path.push (s);
             }
+            else{
+                //todo нету пути handler
+            }
+
+
+            let points = [];
+
+            for (let i = 0; i<path.length; ++i)
+                points.push(this.state.towers[path[i]]);
+
+            //let tmpPoints = []
+            //for (let i = 0; i < 10; i++) tmpPoints.push(this.state.towers[parseInt(Math.random() * 100)])
+            //tmpPoints = tmpPoints.sort((a, b) => a.lng > b.lng)
+            //let points = [this.props.startTower, ...tmpPoints, this.props.finishTower].map(({lat, lng}) => ({lat, lng}))
+            //let check = points.filter(({lat, lng}) => !lat || !lng)
+            //if (check.length) {
+            //    return null
+            //}
             this.drawPolylineWithTransition(points)
         }
 
