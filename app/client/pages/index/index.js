@@ -5,7 +5,7 @@ import MapService from '../../services/map'
 import TowerService from '../../services/tower'
 import Map from '../../components/map'
 import Menu from '../../components/menu'
-import getAdjList from '../../tools/buildGraph'
+import {getAdjList} from '../../tools/buildGraph'
 
 const Index = React.createClass({
   mixins: [PureRenderMixin, SameMixin],
@@ -50,6 +50,7 @@ const Index = React.createClass({
       currentTower: this.state.currentTower,
       startTower: this.state.startTower,
       finishTower: this.state.finishTower,
+      areas: this.state.areas,
       handleRoad: () => this.refs.map.buildRoad()
     }
 

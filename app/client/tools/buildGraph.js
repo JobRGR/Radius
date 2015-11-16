@@ -9,7 +9,7 @@ function getDist(a, b){
     return 2 * R * Math.atan2(Math.sqrt(hrsin), Math.sqrt(1 - hrsin))
 }
 
-export default function getAdjList(areas){
+function getAdjList(areas){
     if (!areas) return null
 
     let adjList = {}
@@ -32,4 +32,9 @@ export default function getAdjList(areas){
         })
 
     return adjList
+}
+
+export default {
+    getAdjList,
+    getDist
 }

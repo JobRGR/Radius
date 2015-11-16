@@ -28,10 +28,10 @@ export default {
     const [newLat, newLng] = this.count(pointA,pointB,dt,time);
     const newA = new L.LatLng(newLat, newLng);
     const isBusted = (
-      (newLat>pointA.lat && newLat>pointB.lat)
-      || (newLat<pointA.lat && newLat<pointB.lat)
-      || (newLng>pointA.lng && newLng>pointB.lng)
-      || (newLng<pointA.lng && newLng<pointB.lng)
+    (newLat>pointA.lat && newLat>pointB.lat)
+    || (newLat<pointA.lat && newLat<pointB.lat)
+    || (newLng>pointA.lng && newLng>pointB.lng)
+    || (newLng<pointA.lng && newLng<pointB.lng)
     );
     if (oldLine) MAP.removeLayer(oldLine);
     if (isBusted) return this.bLine(pointA,pointB,parameters);
@@ -50,4 +50,3 @@ export default {
     setTimeout(() => this.drawPolylineWithTransition(points, speed),transition);
   }
 }
-

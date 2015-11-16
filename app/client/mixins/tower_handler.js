@@ -67,7 +67,6 @@ export default {
                 fillOpacity: 0
             })
             map.addLayer(tower.leafletCircle)
-            console.log(tower.leafletCircle._leaflet_id)
         })
 
         this.setState({towers})
