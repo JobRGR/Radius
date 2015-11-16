@@ -49,7 +49,9 @@ const Index = React.createClass({
     let menuOptions = {
       currentTower: this.state.currentTower,
       startTower: this.state.startTower,
-      finishTower: this.state.finishTower
+      finishTower: this.state.finishTower,
+      areas: this.state.areas,
+      handleRoad: () => this.refs.map.buildRoad()
     }
 
     let mapOptions = {
