@@ -5,7 +5,7 @@ import MapService from '../../services/map'
 import TowerService from '../../services/tower'
 import Map from '../../components/map'
 import Menu from '../../components/menu'
-import getAdjList from '../../tools/buildGraph'
+import {getAdjList} from '../../tools/buildGraph'
 
 const Index = React.createClass({
   mixins: [PureRenderMixin, SameMixin],

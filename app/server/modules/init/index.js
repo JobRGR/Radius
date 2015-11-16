@@ -109,7 +109,7 @@ async.waterfall([
           area: area,
           lng: lng + Math.random() * isMore * 4,
           lat: lat + Math.random() * isMore * -1 * 4,
-          radius: Math.random() * 25000 + 5000
+          radius: Math.random() * 30000 + 30000
         })
       }
       async.each(towers, function (tower, back) {
@@ -135,7 +135,7 @@ async.waterfall([
               area: area,
               lng: lng(item, i),
               lat: lat(item, i),
-              radius: Math.random() * 30000 + 10000
+              radius: Math.random() * 50000 + 150000
             })
           }
           return res

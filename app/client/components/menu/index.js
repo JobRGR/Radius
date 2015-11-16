@@ -2,6 +2,7 @@ import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import Mui from 'material-ui'
 import {Link} from 'react-router'
+import {getDist} from '../../tools/buildGraph'
 import TowerService from '../../services/tower'
 import fetch from 'isomorphic-fetch'
 
@@ -23,8 +24,8 @@ let Header = React.createClass({
         TowerService.startPick(this.props.currentTower);
     },
 
-    handleDepartureInput(e) {
-        let url = googleGetUrl + encodeURIComponent(this.refs.textFieldDeparture.getValue())
+    getTowerByName(inputName, emitName) {
+        let url = googleGetUrl + encodeURIComponent(this.refs[inputName].getValue())
         fetch(url)
             .then(res => res.json())
             .then(res => {
@@ -34,23 +35,7 @@ let Header = React.createClass({
                 let tower = this.findNearestTower(latLng)
                 if (!tower)
                     throw new Error('No towers found in this area')
-                TowerService.startPick(tower);
-            })
-            .catch(err => {console.log(err)})
-    },
-
-    handleDestinationInput(e) {
-        let url = googleGetUrl + encodeURIComponent(this.refs.textFieldDestination.getValue())
-        fetch(url)
-            .then(res => res.json())
-            .then(res => {
-                if (res.status !== 'OK')
-                    throw new Error(res.status)
-                let latLng = res.results[0].geometry.location
-                let tower = this.findNearestTower(latLng)
-                if (!tower)
-                    throw new Error('No towers found in this area')
-                TowerService.finishPick(tower);
+                TowerService[emitName](tower);
             })
             .catch(err => {console.log(err)})
     },
@@ -60,7 +45,7 @@ let Header = React.createClass({
             bestDist = null
         this.props.areas.forEach(area => {
             area.towers.concat(area.bgps).forEach(tower => {
-                let dist = Math.sqrt(Math.pow(latLng.lat - tower.lat, 2) + Math.pow(latLng.lng - tower.lng, 2))
+                let dist = getDist(tower, latLng)
                 if (dist <= tower.radius && (dist < bestDist || bestTower === null)) {
                     bestTower = tower
                     bestDist = dist
@@ -69,6 +54,14 @@ let Header = React.createClass({
         })
 
         return bestTower
+    },
+
+    handleDepartureInput(e) {
+        this.getTowerByName('textFieldDeparture', 'startPick')
+    },
+
+    handleDestinationInput(e) {
+        this.getTowerByName('textFieldDestination', 'finishPick')
     },
 
     fixedFormat(metric) {
