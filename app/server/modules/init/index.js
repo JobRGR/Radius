@@ -103,7 +103,7 @@ async.waterfall([
         lat = state.location.lat
       if (!area || !lat || !lng) return next()
       var towers = []
-      for (var i = 0; i < 40; i++) {
+      for (var i = 0; i < 7; i++) {
         var isMore = Math.random() - Math.random() > 0 ? 0.1 : -0.1
         towers.push({
           area: area,

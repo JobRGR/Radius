@@ -1,11 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
+import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
+import TowerMixin from '../../mixins/tower_handler'
 import {Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup} from 'react-leaflet'
 import TowerMixin from '../../mixins/tower_handler'
 import DrawRoadMixin from '../../mixins/draw_road'
 import MapService from '../../services/map'
-
+import 'leaflet.markercluster'
+import 'leaflet/dist/leaflet.css'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 const position = [48.5, 32.0];
 const zoom = 6;
@@ -108,8 +113,11 @@ export default React.createClass({
                          url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                      />
-                    {this.getTowerElements()}
-                </Map>
+                     <TileLayer
+                         url='http://gisfile.com/map/ukraine/{z}/{x}/{y}.png'
+                         opacity={0.3}
+                     />
+                 </Map>
             </div>
         )
     }
