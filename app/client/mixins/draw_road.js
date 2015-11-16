@@ -1,5 +1,7 @@
 export default {
-
+  distance (A, B){
+    return Math.sqrt((A.lat-B.lat)*(A.lat-B.lat) + (A.lng-B.lng)*(A.lng-B.lng));
+  },
   bLine(A, B, param){
     let MAP = this.refs.map.getLeafletElement();
     let line = new L.Polyline([A, B], param);
@@ -37,12 +39,15 @@ export default {
     setTimeout(() => this.drawLineWithTransition(pointA, pointB, startTime, time, newLine),20);
   },
 
-  drawPolylineWithTransition(points, transition = 1500){
+  drawPolylineWithTransition(points, speed = 0.0025){
     if (points.length <= 1) return;
+    let transition = (this.distance(points[0],points[1]) / speed) || 100;
+
+    console.log(transition, this.distance(points[0],points[1]), speed);
     const now = Date.now();
     this.drawLineWithTransition(points[0],points[1],now,transition);
     points.shift();
-    setTimeout(() => this.drawPolylineWithTransition(points, transition),transition);
+    setTimeout(() => this.drawPolylineWithTransition(points, speed),transition);
   }
 }
 
