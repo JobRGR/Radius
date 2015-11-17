@@ -25,12 +25,16 @@ function getAdjList(areas){
         })
 
     areas
-        .reduce((arr, area)=>arr.concat(area.bgps), [])
-        .forEach(a =>{
-            let arr = areas
-                .filter(b => a.area != b.area && getDist(a, b) <= a.radius)
-                .map(b => b._id)
-            adjList[a._id].push(...arr)
+        .forEach(areaFrom => {
+            areaFrom.bgps.forEach(towerFrom => {
+                areas.forEach(areaTo => {
+                    if (areaFrom.area == areaTo.area) return;
+                    let arr = areaTo.bgps
+                        .filter(towerTo => getDist(towerTo, towerFrom) <= towerFrom.radius)
+                        .map(towerTo => towerTo._id)
+                    adjList[towerFrom._id].push(...arr)
+                })
+            })
         })
 
     return adjList
