@@ -27,7 +27,9 @@ function getAdjList(areas){
     areas
         .reduce((arr, area)=>arr.concat(area.bgps), [])
         .forEach(a =>{
-            let arr = areas.filter(b=>a.area != b.area && getDist(a, b) <= a.radius)
+            let arr = areas
+                .filter(b => a.area != b.area && getDist(a, b) <= a.radius)
+                .map(b => b._id)
             adjList[a._id].push(...arr)
         })
 
