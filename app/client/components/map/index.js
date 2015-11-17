@@ -42,6 +42,32 @@ export default React.createClass({
             let g = [];
             let p = [];
 
+            //for (var key1 in this.props.adjList){
+            //    if (typeof key1 !== 'object') {
+            //       // console.log('Tower ',key1,' ',this.objById(key1).type, ' has connections with');
+            //        for (var key2 in this.props.adjList[key1])
+            //            if (typeof this.props.adjList[key1][key2] !== 'object')
+            //                if (this.objById(key1).type == "tower" && this.objById(this.props.adjList[key1][key2]).type=='bgp')
+            //                console.log(key1, this.props.adjList[key1][key2]);
+            //                //console.log('Tower ', this.props.adjList[key1][key2], ' ',this.objById(this.props.adjList[key1][key2]).type);
+            //
+            //               // console.log(this.props.adjList[key1][key2]);
+            //    }
+            //
+            //}
+            for (var key1 in this.props.adjList){
+                    if (typeof key1 !== 'object') {
+                        for (var key2 in this.props.adjList[key1])
+                            if (typeof this.props.adjList[key1][key2] !== 'object'){
+                                let pointA = {lat: this.objById(key1).lat, lng: this.objById(key1).lng};
+                                let pointB = {lat: this.objById(this.props.adjList[key1][key2]).lat, lng: this.objById(this.props.adjList[key1][key2]).lng};
+                                let points = [pointA, pointB];
+                                this.drawPolylineWithTransition(points);
+                            }
+                    }
+                }
+
+
             for (var key1 in this.props.adjList){
                 const objA = this.objById(key1);
                 const pointA = {lat: objA.lat, lng: objA.lng};
@@ -103,14 +129,6 @@ export default React.createClass({
             for (let i = 0; i<path.length; ++i)
                 points.push(this.state.towers[path[i]]);
 
-            //let tmpPoints = []
-            //for (let i = 0; i < 10; i++) tmpPoints.push(this.state.towers[parseInt(Math.random() * 100)])
-            //tmpPoints = tmpPoints.sort((a, b) => a.lng > b.lng)
-            //let points = [this.props.startTower, ...tmpPoints, this.props.finishTower].map(({lat, lng}) => ({lat, lng}))
-            //let check = points.filter(({lat, lng}) => !lat || !lng)
-            //if (check.length) {
-            //    return null
-            //}
             this.drawPolylineWithTransition(points)
         }
 
