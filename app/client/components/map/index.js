@@ -20,13 +20,10 @@ export default React.createClass({
         return {towers: []}
     },
     numById(id) {
-        if (typeof id === 'object') return; //todo что это за объект?
         for (let i = 0; i<this.state.towers.length; ++i)
             if (this.state.towers[i]._id == id) return i;
     },
     objById(id) {
-        if (typeof id === 'object') return;//todo что это за объект?
-
         for (let i = 0; i<this.state.towers.length; ++i){
             if (this.state.towers[i]._id == id) return this.state.towers[i];
         }
@@ -56,16 +53,15 @@ export default React.createClass({
             //
             //}
             for (var key1 in this.props.adjList){
-                    if (typeof key1 !== 'object') {
-                        for (var key2 in this.props.adjList[key1])
-                            if (typeof this.props.adjList[key1][key2] !== 'object'){
-                                let pointA = {lat: this.objById(key1).lat, lng: this.objById(key1).lng};
-                                let pointB = {lat: this.objById(this.props.adjList[key1][key2]).lat, lng: this.objById(this.props.adjList[key1][key2]).lng};
-                                let points = [pointA, pointB];
-                                this.drawPolylineWithTransition(points);
-                            }
-                    }
+                for (var key2 in this.props.adjList[key1]){
+                    if (this.objById(key1) == undefined || this.objById(this.props.adjList[key1][key2]) == undefined)
+                        console.log(this.objById(key1), key1, this.objById(this.props.adjList[key1][key2]), this.props.adjList[key1][key2]);
+                    let pointA = {lat: this.objById(key1).lat, lng: this.objById(key1).lng};
+                    let pointB = {lat: this.objById(this.props.adjList[key1][key2]).lat, lng: this.objById(this.props.adjList[key1][key2]).lng};
+                    let points = [pointA, pointB];
+                    this.drawPolylineWithTransition(points);
                 }
+            }
 
 
             for (var key1 in this.props.adjList){
