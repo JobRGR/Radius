@@ -67,7 +67,6 @@ let Header = React.createClass({
     fixedFormat(metric) {
         return metric ? metric.toFixed(4) : 'null'
     },
-
     render() {
         return (
             <Card className='menu'>
@@ -154,7 +153,7 @@ let Header = React.createClass({
                             Пройденный путь
                         </div>
                         <div className='tower-row-column'>
-                            NULL
+                            {this.props.pathLength}
                         </div>
                     </div>
                     <div className='tower-row'>

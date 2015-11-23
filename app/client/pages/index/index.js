@@ -16,12 +16,14 @@ const Index = React.createClass({
       adjList: getAdjList(MapService.areas) || {},
       currentTower: TowerService.currentTower || {},
       startTower: TowerService.startTower || {},
-      finishTower: TowerService.finishTower || {}
+      finishTower: TowerService.finishTower || {},
+      pathLength: TowerService.finishTower || 0
     }
   },
 
   componentDidMount() {
     if (!this.state.length) {
+
       MapService.onLoad((areas) => {
         let adjList = getAdjList(areas)
         this.setState({
@@ -41,6 +43,10 @@ const Index = React.createClass({
       TowerService.onFinishTowerPick((finishTower) => {
         this.setState({finishTower})
       })
+
+      TowerService.onPathBuildEnd((pathLength) => {
+        this.setState({pathLength})
+      })
     }
   },
 
@@ -51,7 +57,8 @@ const Index = React.createClass({
       startTower: this.state.startTower,
       finishTower: this.state.finishTower,
       areas: this.state.areas,
-      handleRoad: () => this.refs.map.buildRoad()
+      handleRoad: () => this.refs.map.buildRoad(),
+      pathLength: this.state.pathLength
     }
 
     let mapOptions = {

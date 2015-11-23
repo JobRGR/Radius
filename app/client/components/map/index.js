@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
 import TowerMixin from '../../mixins/tower_handler'
+import TowerService from '../../services/tower'
 import DrawRoadMixin from '../../mixins/draw_road'
+import GetPathMixin from '../../mixins/get_path'
 import MapService from '../../services/map'
 import 'leaflet.markercluster'
 import 'leaflet/dist/leaflet.css'
@@ -14,122 +16,15 @@ const position = [48.5, 32.0];
 const zoom = 6;
 
 export default React.createClass({
-    mixins: [PureRenderMixin, TowerMixin, DrawRoadMixin],
+    mixins: [PureRenderMixin, GetPathMixin, TowerMixin, DrawRoadMixin],
 
     getInitialState() {
         return {towers: []}
     },
-    numById(id) {
-        for (let i = 0; i<this.state.towers.length; ++i)
-            if (this.state.towers[i]._id == id) return i;
+    buildRoad() {
+        let path = this.makePath(this.props.startTower, this.props.finishTower);
+        if (path.errMsg) alert(path.errMsg);
     },
-    objById(id) {
-        for (let i = 0; i<this.state.towers.length; ++i){
-            if (this.state.towers[i]._id == id) return this.state.towers[i];
-        }
-
-    },
-    componentDidUpdate() {
-
-        if (this.props.startTower.lat && this.props.finishTower.lat){
-            const INF = 999999999999;
-            let n = this.state.towers.length;
-            let s = this.numById(this.props.startTower._id);
-            let t = this.numById(this.props.finishTower._id);
-            let g = [];
-            let p = [];
-
-            //for (var key1 in this.props.adjList){
-            //    if (typeof key1 !== 'object') {
-            //       // console.log('Tower ',key1,' ',this.objById(key1).type, ' has connections with');
-            //        for (var key2 in this.props.adjList[key1])
-            //            if (typeof this.props.adjList[key1][key2] !== 'object')
-            //                if (this.objById(key1).type == "tower" && this.objById(this.props.adjList[key1][key2]).type=='bgp')
-            //                console.log(key1, this.props.adjList[key1][key2]);
-            //                //console.log('Tower ', this.props.adjList[key1][key2], ' ',this.objById(this.props.adjList[key1][key2]).type);
-            //
-            //               // console.log(this.props.adjList[key1][key2]);
-            //    }
-            //
-            //}
-            for (var key1 in this.props.adjList){
-                for (var key2 in this.props.adjList[key1]){
-                    if (this.objById(key1) == undefined || this.objById(this.props.adjList[key1][key2]) == undefined)
-                        console.log(this.objById(key1), key1, this.objById(this.props.adjList[key1][key2]), this.props.adjList[key1][key2]);
-                    let pointA = {lat: this.objById(key1).lat, lng: this.objById(key1).lng};
-                    let pointB = {lat: this.objById(this.props.adjList[key1][key2]).lat, lng: this.objById(this.props.adjList[key1][key2]).lng};
-                    let points = [pointA, pointB];
-                    this.drawPolylineWithTransition(points);
-                }
-            }
-
-
-            for (var key1 in this.props.adjList){
-                const objA = this.objById(key1);
-                const pointA = {lat: objA.lat, lng: objA.lng};
-                const ind1 = this.numById(key1);
-                g[ind1] = [];
-                for (var key2 in this.props.adjList[key1]){
-                    const objB = this.objById(this.props.adjList[key1][key2]);
-                    if (objB != undefined) {
-                        const pointB = {lat: objB.lat, lng: objB.lng};
-                        const el = {
-                            num: this.numById(this.props.adjList[key1][key2]),
-                            val: this.distance(pointA, pointB)
-                        };
-                        g[ind1].push(el);
-                    }
-                }
-            }
-
-            let d = [], u = [];
-            for (let i = 0; i<n; ++i){
-                d[i] = INF;
-                u[i] = 0;
-            }
-
-            d[s] = 0;
-
-            for (let i=0; i<n; ++i) {
-                let v = -1;
-                for (let j=0; j<n; ++j)
-                if (!u[j] && (v == -1 || d[j] < d[v]))
-                    v = j;
-                if (d[v] == INF)
-                    break;
-                u[v] = true;
-
-
-                for (let j=0; j<g[v].length; ++j) {
-                    let to = g[v][j].num,
-                        len = g[v][j].val;
-                    if (d[v] + len < d[to]) {
-                        d[to] = d[v] + len;
-                        p[to] = v;
-                    }
-                }
-            }
-
-            let path=[];
-            if (d[t]!=INF) {
-                for (let v=t; v!=s; v=p[v]) path.push (v);
-                path.push (s);
-            }
-            else{
-                //todo нету пути handler
-            }
-
-
-            let points = [];
-
-            for (let i = 0; i<path.length; ++i)
-                points.push(this.state.towers[path[i]]);
-
-            this.drawPolylineWithTransition(points)
-        }
-
-    },
-
     render() {
         return (
             <div className='map-container'>

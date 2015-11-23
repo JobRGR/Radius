@@ -28,7 +28,7 @@ function getAdjList(areas){
         .forEach(areaFrom => {
             areaFrom.bgps.forEach(towerFrom => {
                 areas.forEach(areaTo => {
-                    if (areaFrom.area == areaTo.area) return;
+                    if (areaFrom.name == areaTo.name) return;
                     let arr = areaTo.bgps
                         .filter(towerTo => getDist(towerTo, towerFrom) <= towerFrom.radius)
                         .map(towerTo => towerTo._id)

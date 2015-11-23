@@ -6,10 +6,15 @@ class Tower extends EventEmitter {
         this.tower = null;
         this.startTower = null;
         this.finishTower = null;
+        this.pathLength = 0;
     }
 
     onTowerPick(cb) {
         this.on('picked', cb)
+    }
+
+    onPathBuildEnd(cb) {
+        this.on('pathBuildEnd', cb)
     }
 
     onStartTowerPick(cb) {
@@ -37,6 +42,11 @@ class Tower extends EventEmitter {
     finishPick(tower) {
         this.finishTower = tower
         this.emit('finishPicked', this.finishTower)
+    }
+
+    pathBuildEnd(length) {
+        this.pathLength = length
+        this.emit('pathBuildEnd', this.pathLength)
     }
 }
 
