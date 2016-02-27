@@ -1,5 +1,7 @@
 var async = require('async')
 
+var cities = require('../modules/init/city.js')
+
 var Area = require('../modules/area').Area
 var Tower = require('../modules/tower').Tower
 var BGP = require('../modules/bgp').BGP
@@ -69,3 +71,6 @@ exports.all = function(req, res, next) {
   })
 }
 
+exports.city = function(req, res, next) {
+  res.send({cities: cities})
+}

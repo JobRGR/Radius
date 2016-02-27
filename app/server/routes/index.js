@@ -11,6 +11,7 @@ module.exports = function() {
     .get('/tower', handler.tower)
     .get('/bgp/:id', handler.bgp)
     .get('/bgp', handler.bgp)
+    .get('/city', handler.city)
     .get('/all', handler.all)
 
   app
