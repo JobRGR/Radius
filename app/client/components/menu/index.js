@@ -2,7 +2,7 @@ import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import Mui from 'material-ui'
 import {Link} from 'react-router'
-import TowerService from '../../services/tower'
+import CityService from '../../services/city'
 import fetch from 'isomorphic-fetch'
 
 const {
@@ -16,11 +16,11 @@ let Header = React.createClass({
     mixins: [PureRenderMixin],
 
     handleFinishClick() {
-        TowerService.finishPick(this.props.currentTower);
+        CityService.finishPick(this.props.currentCity)
     },
 
     handleStartClick() {
-        TowerService.startPick(this.props.currentTower);
+        CityService.startPick(this.props.currentCity)
     },
 
     handleDepartureInput(e) {
@@ -31,10 +31,10 @@ let Header = React.createClass({
                 if (res.status !== 'OK')
                     throw new Error(res.status)
                 let latLng = res.results[0].geometry.location
-                let tower = this.findNearestTower(latLng)
-                if (!tower)
-                    throw new Error('No towers found in this area')
-                TowerService.startPick(tower);
+                let city = this.findNearestCity(latLng)
+                if (!city)
+                    throw new Error('No citys found in this area')
+                CityService.startPick(city);
             })
             .catch(err => {console.log(err)})
     },
@@ -47,28 +47,28 @@ let Header = React.createClass({
                 if (res.status !== 'OK')
                     throw new Error(res.status)
                 let latLng = res.results[0].geometry.location
-                let tower = this.findNearestTower(latLng)
-                if (!tower)
-                    throw new Error('No towers found in this area')
-                TowerService.finishPick(tower);
+                let city = this.findNearestCity(latLng)
+                if (!city)
+                    throw new Error('No citys found in this area')
+                CityService.finishPick(city);
             })
             .catch(err => {console.log(err)})
     },
 
-    findNearestTower(latLng) {
-        let bestTower = null,
+    findNearestCity(latLng) {
+        let bestCity = null,
             bestDist = null
         this.props.areas.forEach(area => {
-            area.towers.concat(area.bgps).forEach(tower => {
-                let dist = Math.sqrt(Math.pow(latLng.lat - tower.lat, 2) + Math.pow(latLng.lng - tower.lng, 2))
-                if (dist <= tower.radius && (dist < bestDist || bestTower === null)) {
-                    bestTower = tower
+            area.citys.concat(area.bgps).forEach(city => {
+                let dist = Math.sqrt(Math.pow(latLng.lat - city.lat, 2) + Math.pow(latLng.lng - city.lng, 2))
+                if (dist <= city.radius && (dist < bestDist || bestCity === null)) {
+                    bestCity = city
                     bestDist = dist
                 }
             })
         })
 
-        return bestTower
+        return bestCity
     },
 
     fixedFormat(metric) {
@@ -79,7 +79,7 @@ let Header = React.createClass({
         return (
             <Card className='menu'>
                 <AppBar title='Radius' iconElementRight={<FlatButton onClick={this.props.handleRoad} label="START"/>}/>
-                <div className='tower-search'>
+                <div className='city-search'>
                     <TextField
                         ref='textFieldDeparture'
                         hintText='Киев, улица Политехническая, 20'
@@ -101,74 +101,74 @@ let Header = React.createClass({
                         onBlur={this.handleDestinationInput}
                     />
                 </div>
-                <div className='tower-table'>
-                    <div className='tower-row header-row'>
-                        <div className='tower-row-column-big'>Тип</div>
-                        <div className='tower-row-column'>Широта</div>
-                        <div className='tower-row-column'>Долгота</div>
+                <div className='city-table'>
+                    <div className='city-row header-row'>
+                        <div className='city-row-column-big'>Тип</div>
+                        <div className='city-row-column'>Широта</div>
+                        <div className='city-row-column'>Долгота</div>
                     </div>
-                    <div className='tower-row'>
-                        <div className='tower-row-column-big'>
+                    <div className='city-row'>
+                        <div className='city-row-column-big'>
                             <RaisedButton
                                 label='текущая вышка'
                                 disabled={true}
                                 fullWidth={true}/>
                         </div>
-                        <div className='tower-row-column'>
-                            {this.fixedFormat(this.props.currentTower.lat)}
+                        <div className='city-row-column'>
+                            {this.fixedFormat(this.props.currentCity.lat)}
                         </div>
-                        <div className='tower-row-column'>
-                            {this.fixedFormat(this.props.currentTower.lng)}
+                        <div className='city-row-column'>
+                            {this.fixedFormat(this.props.currentCity.lng)}
                         </div>
                     </div>
-                    <div className='tower-row'>
-                        <div className='tower-row-column-big'>
+                    <div className='city-row'>
+                        <div className='city-row-column-big'>
                             <RaisedButton
                                 label='начальная вышка'
                                 onClick={this.handleStartClick}
                                 secondary={true}
                                 fullWidth={true}/>
                         </div>
-                        <div className='tower-row-column'>
-                            {this.fixedFormat(this.props.startTower.lat)}
+                        <div className='city-row-column'>
+                            {this.fixedFormat(this.props.startCity.lat)}
                         </div>
-                        <div className='tower-row-column'>
-                            {this.fixedFormat(this.props.startTower.lng)}
+                        <div className='city-row-column'>
+                            {this.fixedFormat(this.props.startCity.lng)}
                         </div>
                     </div>
-                    <div className='tower-row'>
-                        <div className='tower-row-column-big'>
+                    <div className='city-row'>
+                        <div className='city-row-column-big'>
                             <RaisedButton
                                 label='конечная вышка'
                                 onClick={this.handleFinishClick}
                                 secondary={true}
                                 fullWidth={true}/>
                         </div>
-                        <div className='tower-row-column'>
-                            {this.fixedFormat(this.props.finishTower.lat)}
+                        <div className='city-row-column'>
+                            {this.fixedFormat(this.props.finishCity.lat)}
                         </div>
-                        <div className='tower-row-column'>
-                            {this.fixedFormat(this.props.finishTower.lng)}
+                        <div className='city-row-column'>
+                            {this.fixedFormat(this.props.finishCity.lng)}
                         </div>
                     </div>
                 </div>
-                <div className='tower-header'>
+                <div className='city-header'>
                     Расчет пути
                 </div>
-                <div className='tower-table'>
-                    <div className='tower-row'>
-                        <div className='tower-row-column'>
+                <div className='city-table'>
+                    <div className='city-row'>
+                        <div className='city-row-column'>
                             Пройденный путь
                         </div>
-                        <div className='tower-row-column'>
+                        <div className='city-row-column'>
                             NULL
                         </div>
                     </div>
-                    <div className='tower-row'>
-                        <div className='tower-row-column'>
+                    <div className='city-row'>
+                        <div className='city-row-column'>
                             Затраченное время
                         </div>
-                        <div className='tower-row-column'>
+                        <div className='city-row-column'>
                             NULL
                         </div>
                     </div>

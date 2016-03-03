@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { Map,MapLayer, Marker, Popup, TileLayer, Circle, CircleMarker, LayerGroup, FeatureGroup } from 'react-leaflet'
-import TowerMixin from '../../mixins/tower_handler'
+import CityMixin from '../../mixins/city_handler'
 import DrawRoadMixin from '../../mixins/draw_road'
 import MapService from '../../services/map'
 import 'leaflet.markercluster'
@@ -10,21 +10,22 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
-const position = [48.5, 32.0];
-const zoom = 6;
+const position = [48.5, 32.0]
+const zoom = 6
 
 export default React.createClass({
-    mixins: [PureRenderMixin, TowerMixin, DrawRoadMixin],
+    mixins: [PureRenderMixin, CityMixin, DrawRoadMixin],
 
     getInitialState() {
-        return {towers: []}
+        return {cities: []}
     },
 
     buildRoad() {
         let tmpPoints = []
-        for (let i = 0; i < 10; i++) tmpPoints.push(this.state.towers[parseInt(Math.random() * 100)])
+        for (let i = 0; i < 10; i++)
+            tmpPoints.push(this.state.cities[parseInt(Math.random() * 100)])
         tmpPoints = tmpPoints.sort((a, b) => a.lng > b.lng)
-        let points = [this.props.startTower, ...tmpPoints, this.props.finishTower].map(({lat, lng}) => ({lat, lng}))
+        let points = [this.props.startCity, ...tmpPoints, this.props.finishCity].map(({lat, lng}) => ({lat, lng}))
         let check = points.filter(({lat, lng}) => !lat || !lng)
         if (check.length) {
             return null

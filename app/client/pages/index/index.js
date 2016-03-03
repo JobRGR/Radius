@@ -1,68 +1,45 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import SameMixin from '../../mixins/some_mixin'
 import MapService from '../../services/map'
-import TowerService from '../../services/tower'
+import CityService from '../../services/city'
 import Map from '../../components/map'
 import Menu from '../../components/menu'
-import getAdjList from '../../tools/buildGraph'
+
 
 const Index = React.createClass({
-  mixins: [PureRenderMixin, SameMixin],
+  mixins: [PureRenderMixin],
 
   getInitialState() {
     return {
-      areas: MapService.areas || [],
-      adjList: getAdjList(MapService.areas) || {},
-      currentTower: TowerService.currentTower || {},
-      startTower: TowerService.startTower || {},
-      finishTower: TowerService.finishTower || {}
+      cities: MapService.cities || [],
+      currentCity: CityService.currentCity || {},
+      startCity: CityService.startCity || {},
+      finishCity: CityService.finishCity || {}
     }
   },
 
   componentDidMount() {
-    if (!this.state.length) {
-      MapService.onLoad((areas) => {
-        let adjList = getAdjList(areas)
-        this.setState({
-          areas,
-          adjList
-        })
-      })
-
-      TowerService.onTowerPick((currentTower) => {
-        this.setState({currentTower})
-      })
-
-      TowerService.onStartTowerPick((startTower) => {
-        this.setState({startTower})
-      })
-
-      TowerService.onFinishTowerPick((finishTower) => {
-        this.setState({finishTower})
-      })
-    }
+    MapService.onLoad(cities => this.setState({cities}))
+    CityService.onCityPick(currentCity => this.setState({currentCity}))
+    CityService.onStartCityPick(startCity => this.setState({startCity}))
+    CityService.onFinishCityPick(finishCity => this.setState({finishCity}))
   },
 
   render() {
-
-    let menuOptions = {
-      currentTower: this.state.currentTower,
-      startTower: this.state.startTower,
-      finishTower: this.state.finishTower,
-      areas: this.state.areas,
+    const menuOptions = {
+      currentCity: this.state.currentCity,
+      startCity: this.state.startCity,
+      finishCity: this.state.finishCity,
+      cities: this.state.cities,
       handleRoad: () => this.refs.map.buildRoad()
     }
-
-    let mapOptions = {
+    const mapOptions = {
       ref: 'map',
-      areas: this.state.areas,
-      adjList: this.state.adjList,
-      currentTower: this.state.currentTower,
-      startTower: this.state.startTower,
-      finishTower: this.state.finishTower
+      cities: this.state.cities,
+      currentCity: this.state.currentCity,
+      startCity: this.state.startCity,
+      finishCity: this.state.finishCity
     }
-
     return (
       <div className='content'>
         <Menu {...menuOptions}/>

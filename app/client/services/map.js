@@ -5,8 +5,7 @@ import fetch from 'isomorphic-fetch'
 class Map extends EventEmitter {
   constructor() {
     super()
-    this.areas = null
-    this.loading = null
+    this.cities = null
   }
 
   onLoad(cb) {
@@ -20,20 +19,20 @@ class Map extends EventEmitter {
   load() {
     if (this.loading) return null
     this.loading = {}
-    fetch('/api/all', {method: 'get'})
+    fetch('/api/city', {method: 'get'})
       .then(res => res.json())
       .then(res => this.setMap(res))
-      .catch(err => this.setMap(null))
+      .catch(err => console.log(err))
   }
 
   get cachedMap() {
-    return this.posts
+    return this.cities
   }
 
   setMap(res) {
     this.loading = null
-    this.areas = res ? res.areas : null
-    this.emit('loaded', this.areas)
+    this.cities = res ? res.cities : null
+    this.emit('loaded', this.cities)
   }
 }
 
