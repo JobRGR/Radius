@@ -50,8 +50,7 @@
     "react-addons-update": "0.14.0",
     "react-dom": "0.14.0",
     "react-leaflet": "0.8.0",
-    "react-router": "1.0.0",
-    "react-tap-event-plugin": "0.2.1",
-    "jquery": "*"
+    "react-router": "2.0.1",
+    "react-tap-event-plugin": "0.2.1"
   }
 }
