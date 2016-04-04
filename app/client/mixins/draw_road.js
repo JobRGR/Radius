@@ -13,9 +13,9 @@ export default {
     ]
   },
 
-  drawLineWithTransition(pointA, pointB, startTime, time, oldLine){
+  drawLineWithTransition(pointA, pointB, startTime, time, oldLine, color){
     const parameters = {
-      color: 'red',
+      color: color,
       weight: 3,
       opacity: 1,
       smoothFactor: 1
@@ -34,14 +34,14 @@ export default {
     if (oldLine) MAP.removeLayer(oldLine);
     if (isBusted) return this.bLine(pointA,pointB,parameters);
     const newLine = this.bLine(pointA, newA, parameters);
-    setTimeout(() => this.drawLineWithTransition(pointA, pointB, startTime, time, newLine),20);
+    setTimeout(() => this.drawLineWithTransition(pointA, pointB, startTime, time, newLine, color),20);
   },
 
-  drawPolylineWithTransition(points, transition = 1500){
+  drawPolylineWithTransition(points, transition = 1500, color = 'red'){
     if (points.length <= 1) return;
     const now = Date.now();
-    this.drawLineWithTransition(points[0],points[1],now,transition);
+    this.drawLineWithTransition(points[0],points[1],now,transition, null, color);
     points.shift();
-    setTimeout(() => this.drawPolylineWithTransition(points, transition),transition);
+    setTimeout(() => this.drawPolylineWithTransition(points, transition, color),transition);
   }
 }

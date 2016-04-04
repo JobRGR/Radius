@@ -40,7 +40,7 @@
     "leaflet": "0.7.5",
     "leaflet.markercluster": "0.4.0",
     "material-ui": "0.13.0",
-    "mongoose": "4.2.0",
+    "mongoose": "4.4.11",
     "morgan": "1.6.1",
     "normalize-styl": "3.0.3",
     "react": "0.14.0",

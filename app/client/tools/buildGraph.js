@@ -1,4 +1,4 @@
-function getDist(a, b){
+export function getDist(a, b){
     let R = 6371000,
         f1 = a.lat*Math.PI/180,
         f2 = b.lat*Math.PI/180,
@@ -9,7 +9,7 @@ function getDist(a, b){
     return 2 * R * Math.atan2(Math.sqrt(hrsin), Math.sqrt(1 - hrsin))
 }
 
-export default function getAdjList(areas){
+export function getAdjList(areas){
     if (!areas) return null
 
     let adjList = {}
