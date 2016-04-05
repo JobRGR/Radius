@@ -78,7 +78,19 @@ let Header = React.createClass({
     render() {
         return (
             <Card className='menu'>
-                <AppBar title='Radius' iconElementRight={<FlatButton onClick={this.props.handleRoad} label="START"/>}/>
+                <AppBar title='Radius'/>
+                <RaisedButton
+                    label='START MAX-FLOW'
+                    onClick={() => this.props.handleRoad()}
+                    secondary={true}
+                    fullWidth={true}
+                    style={{'margin': '5px 0'}}/>
+                <RaisedButton
+                    label='START HEURISTIC'
+                    onClick={() => this.props.handleRoad()}
+                    secondary={true}
+                    fullWidth={true}
+                    style={{'margin': '5px 0'}}/>
                 <div className='city-search'>
                     <TextField
                         ref='textFieldDeparture'
@@ -158,18 +170,18 @@ let Header = React.createClass({
                 <div className='city-table'>
                     <div className='city-row'>
                         <div className='city-row-column'>
-                            Пройденный путь
+                            Кол-во путей
                         </div>
                         <div className='city-row-column'>
-                            NULL
+                            {this.props.flow}
                         </div>
                     </div>
                     <div className='city-row'>
                         <div className='city-row-column'>
-                            Затраченное время
+                            Средняя длина пути
                         </div>
                         <div className='city-row-column'>
-                            NULL
+                            {(this.props.avgDist / 1000).toFixed(3)}
                         </div>
                     </div>
                 </div>

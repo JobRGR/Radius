@@ -14,7 +14,9 @@ const Index = React.createClass({
       cities: MapService.cities || [],
       currentCity: CityService.currentCity || {},
       startCity: CityService.startCity || {},
-      finishCity: CityService.finishCity || {}
+      finishCity: CityService.finishCity || {},
+      flow: null,
+      avgDist: null
     }
   },
 
@@ -25,12 +27,22 @@ const Index = React.createClass({
     CityService.onFinishCityPick(finishCity => this.setState({finishCity}))
   },
 
+  setDist(dist) {
+    this.setState({avgDist: dist})
+  },
+
+  setFlow(flow) {
+    this.setState({flow})
+  },
+
   render() {
     const menuOptions = {
       currentCity: this.state.currentCity,
       startCity: this.state.startCity,
       finishCity: this.state.finishCity,
       cities: this.state.cities,
+      flow: this.state.flow,
+      avgDist: this.state.avgDist,
       handleRoad: () => this.refs.map.buildRoad()
     }
     const mapOptions = {
@@ -38,7 +50,9 @@ const Index = React.createClass({
       cities: this.state.cities,
       currentCity: this.state.currentCity,
       startCity: this.state.startCity,
-      finishCity: this.state.finishCity
+      finishCity: this.state.finishCity,
+      setFlow: this.setFlow,
+      setDist: this.setDist
     }
     return (
       <div className='content'>
