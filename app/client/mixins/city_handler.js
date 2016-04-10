@@ -18,7 +18,7 @@ export default {
             city.type = 'city'
             city.leafletCluster = markerCluster
             city.leafletElement = new L.Marker([city.lat, city.lng], {icon: new BlueIcon()})
-              .bindPopup('lat:' +  city.lat.toFixed(4) + '<br/>lng:' + city.lng.toFixed(4))
+              .bindPopup(city.name + '<br/>lat:' +  city.lat.toFixed(4) + '<br/>lng:' + city.lng.toFixed(4))
             city.leafletElement.on('click', () => this.handleClick(city))
             markers.push(city.leafletElement)
             return city

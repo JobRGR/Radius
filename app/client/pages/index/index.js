@@ -4,6 +4,9 @@ import MapService from '../../services/map'
 import CityService from '../../services/city'
 import Map from '../../components/map'
 import Menu from '../../components/menu'
+import RightNav from '../../components/right-nav'
+import LeftNav from 'material-ui/lib/left-nav'
+import AppBar from 'material-ui/lib/app-bar'
 
 
 const Index = React.createClass({
@@ -16,7 +19,8 @@ const Index = React.createClass({
       startCity: CityService.startCity || {},
       finishCity: CityService.finishCity || {},
       flow: null,
-      avgDist: null
+      avgDist: null,
+      paths: []
     }
   },
 
@@ -27,12 +31,12 @@ const Index = React.createClass({
     CityService.onFinishCityPick(finishCity => this.setState({finishCity}))
   },
 
-  setDist(dist) {
-    this.setState({avgDist: dist})
+  setResultMaxFlow(flow, avgDist, paths) {
+    this.setState({flow, avgDist, paths})
   },
 
-  setFlow(flow) {
-    this.setState({flow})
+  setResultReverseWave() {
+    /*code here*/
   },
 
   render() {
@@ -43,7 +47,10 @@ const Index = React.createClass({
       cities: this.state.cities,
       flow: this.state.flow,
       avgDist: this.state.avgDist,
-      handleRoad: () => this.refs.map.buildRoad()
+      clearMap: () => this.refs.map.clearMap(),
+      handleRoadMaxFlow: () => this.refs.map.buildRoadMaxFlow(),
+      handleRoadReverseWave: () => this.refs.map.buildRoadReverseWave(),
+      handleOpenResults: () => this.refs.rightNav.handleOpen()
     }
     const mapOptions = {
       ref: 'map',
@@ -51,11 +58,16 @@ const Index = React.createClass({
       currentCity: this.state.currentCity,
       startCity: this.state.startCity,
       finishCity: this.state.finishCity,
-      setFlow: this.setFlow,
-      setDist: this.setDist
+      setResultMaxFlow: this.setResultMaxFlow,
+      setResultReverseWave: this.setResultReverseWave
+    }
+    const navOptions = {
+      ref: 'rightNav',
+      paths: this.state.paths
     }
     return (
       <div className='content'>
+        <RightNav {...navOptions}/>
         <Menu {...menuOptions}/>
         <Map {...mapOptions}/>
       </div>

@@ -32,7 +32,11 @@ export default {
     || (newLng<pointA.lng && newLng<pointB.lng)
     );
     if (oldLine) MAP.removeLayer(oldLine);
-    if (isBusted) return this.bLine(pointA,pointB,parameters);
+    if (isBusted) {
+      let fullLine = this.bLine(pointA, pointB, parameters);
+      this.setState(({lines}) => ({lines: [...lines, fullLine]}))
+      return fullLine;
+    }
     const newLine = this.bLine(pointA, newA, parameters);
     setTimeout(() => this.drawLineWithTransition(pointA, pointB, startTime, time, newLine, color),20);
   },
@@ -41,7 +45,6 @@ export default {
     if (points.length <= 1) return;
     const now = Date.now();
     this.drawLineWithTransition(points[0],points[1],now,transition, null, color);
-    points.shift();
-    setTimeout(() => this.drawPolylineWithTransition(points, transition, color),transition);
+    setTimeout(() => this.drawPolylineWithTransition(points.slice(1), transition, color), transition);
   }
 }
