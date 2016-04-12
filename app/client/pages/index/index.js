@@ -32,11 +32,13 @@ const Index = React.createClass({
   },
 
   setResultMaxFlow(flow, avgDist, paths) {
-    this.setState({flow, avgDist, paths})
+    let maxFlow = {flow, avgDist, paths}
+    this.setState({maxFlow})
   },
 
-  setResultReverseWave() {
-    /*code here*/
+  setResultReverseWave(flow, avgDist, paths) {
+    let reverseWave = {flow, avgDist, paths}
+    this.setState({reverseWave})
   },
 
   render() {
@@ -45,8 +47,8 @@ const Index = React.createClass({
       startCity: this.state.startCity,
       finishCity: this.state.finishCity,
       cities: this.state.cities,
-      flow: this.state.flow,
-      avgDist: this.state.avgDist,
+      maxFlow: this.state.maxFlow || null,
+      reverseWave: this.state.reverseWave || null,
       clearMap: () => this.refs.map.clearMap(),
       handleRoadMaxFlow: () => this.refs.map.buildRoadMaxFlow(),
       handleRoadReverseWave: () => this.refs.map.buildRoadReverseWave(),
@@ -63,7 +65,7 @@ const Index = React.createClass({
     }
     const navOptions = {
       ref: 'rightNav',
-      paths: this.state.paths
+      paths: this.state.maxFlow ? this.state.maxFlow.paths : []
     }
     return (
       <div className='content'>

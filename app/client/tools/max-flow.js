@@ -40,8 +40,7 @@ function maxFlow(cities, startCity, finishCity) {
     visited[i] = false
     p[i] = -1
     for (let j = 0; j < 2 * cities.length; ++j)
-      c[i][j] = 0,
-        f[i][j] = 0
+      c[i][j] = 0, f[i][j] = 0
   }
   for (let i = 0; i < cities.length; ++i) {
     g[2 * i].push(2 * i + 1)

@@ -6,6 +6,7 @@ import CityMixin from '../../mixins/city_handler'
 import DrawRoadMixin from '../../mixins/draw_road'
 import MapService from '../../services/map'
 import maxFlow from '../../tools/max-flow'
+import reverseWave from '../../tools/reverse-wave'
 import 'leaflet.markercluster'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -39,7 +40,13 @@ export default React.createClass({
   },
 
   buildRoadReverseWave() {
-    /*code here*/
+    let {flow, avgDist, paths, pathsToDraw} = reverseWave(this.props.cities, this.props.startCity, this.props.finishCity)
+    for (let i = 0; i < pathsToDraw.length / 2; ++i) {
+      this.drawPolylineWithTransition(pathsToDraw[2 * i], 1500, colors[cc % colors.length])
+      this.drawPolylineWithTransition(pathsToDraw[2 * i + 1], 1500, colors[cc % colors.length])
+      cc += 1
+    }
+    this.props.setResultReverseWave(flow, avgDist, paths)
   },
 
   render() {

@@ -175,10 +175,10 @@ export default React.createClass({
               Кол-во путей
             </div>
             <div className='city-row-column'>
-              {this.props.flow || 'NULL'}
+              {this.props.maxFlow ? this.props.maxFlow.flow : null}
             </div>
             <div className='city-row-column'>
-              NULL
+              {this.props.reverseWave ? this.props.reverseWave.flow : null}
             </div>
           </div>
           <div className='city-row'>
@@ -186,10 +186,10 @@ export default React.createClass({
               Средняя длина пути
             </div>
             <div className='city-row-column'>
-              {this.fixedFormat(this.props.avgDist / 1000)}
+              {this.fixedFormat(this.props.maxFlow ? this.props.maxFlow.avgDist / 1000 : null)}
             </div>
             <div className='city-row-column'>
-              NULL
+              {this.fixedFormat(this.props.reverseWave ? this.props.reverseWave.avgDist / 1000 : null)}
             </div>
           </div>
         </div>
