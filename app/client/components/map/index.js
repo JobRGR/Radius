@@ -33,20 +33,24 @@ export default React.createClass({
   },
 
   buildRoadMaxFlow() {
+    let time = -performance.now()
     let {flow, avgDist, paths} = maxFlow(this.props.cities, this.props.startCity, this.props.finishCity)
+    time += performance.now()
     for (let i = 0; i < paths.length; ++i)
       this.drawPolylineWithTransition(paths[i], 1500, colors[(cc++) % colors.length])
-    this.props.setResultMaxFlow(flow, avgDist, paths)
+    this.props.setResultMaxFlow(flow, avgDist, paths, time)
   },
 
   buildRoadReverseWave() {
+    let time = -performance.now()
     let {flow, avgDist, paths, pathsToDraw} = reverseWave(this.props.cities, this.props.startCity, this.props.finishCity)
+    time += performance.now()
     for (let i = 0; i < pathsToDraw.length / 2; ++i) {
       this.drawPolylineWithTransition(pathsToDraw[2 * i], 1500, colors[cc % colors.length])
       this.drawPolylineWithTransition(pathsToDraw[2 * i + 1], 1500, colors[cc % colors.length])
       cc += 1
     }
-    this.props.setResultReverseWave(flow, avgDist, paths)
+    this.props.setResultReverseWave(flow, avgDist, paths, time)
   },
 
   render() {

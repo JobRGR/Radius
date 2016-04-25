@@ -192,6 +192,17 @@ export default React.createClass({
               {this.fixedFormat(this.props.reverseWave ? this.props.reverseWave.avgDist / 1000 : null)}
             </div>
           </div>
+          <div className='city-row'>
+            <div className='city-row-column-big'>
+              время, мс
+            </div>
+            <div className='city-row-column'>
+              {this.fixedFormat(this.props.maxFlow ? this.props.maxFlow.time : null)}
+            </div>
+            <div className='city-row-column'>
+              {this.fixedFormat(this.props.reverseWave ? this.props.reverseWave.time : null)}
+            </div>
+          </div>
         </div>
         <RaisedButton
           label='Показать результаты'

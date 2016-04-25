@@ -4,6 +4,12 @@ import LeftNav from 'material-ui/lib/left-nav'
 import {getDist} from '../../tools/build-graph'
 
 
+const headTextStyle = {
+  marginLeft: 30,
+  fontSize: 30,
+  fontWeight: 'bold'
+}
+
 export default React.createClass({
   mixins: [PureRenderMixin],
 
@@ -51,8 +57,13 @@ export default React.createClass({
         openRight={true}
         onRequestChange={open => this.setState({open})}
       >
+        <div style={headTextStyle}>Max Flow</div>
         {
-          this.props.paths.map((arr, ind) => this.pathDiv(arr, ind + 1))
+          this.props.maxFlowPaths.map((arr, ind) => this.pathDiv(arr, ind + 1))
+        }
+        <div style={headTextStyle}>Reverse Wave</div>
+        {
+          this.props.reverseWavePaths.map((arr, ind) => this.pathDiv(arr, ind + 1))
         }
       </LeftNav>
     )

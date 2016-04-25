@@ -1,5 +1,7 @@
 import {getDist} from './build-graph'
 
+const reachDist = 100000
+
 let visitedS = [], visitedT = [],
     pathS = [], pathT = [],
     queueS = [], queueT = [], queue = [],
@@ -18,11 +20,12 @@ function markPath(s, t, v) {
   }
 }
 
-function bfs(s, t) {
+function bfs(cities, s, t) {
   let paths = [],
       pathsToDraw = []
   queueS = []
   queueT = []
+  links = []
   visitedS[s] = true
   visitedT[t] = true
   g[s].forEach(u => {
@@ -103,6 +106,31 @@ function bfs(s, t) {
     paths.push(p)
     pathsToDraw.push([...pp])
   })
+  /*smooth path*/
+  for (let i = 0; i < pathsToDraw.length; ++i) {
+    let ds = [0],
+      ps = [-1]
+    for (let j = 1; j < pathsToDraw[i].length; ++j) {
+      ps[j] = j - 1
+      ds[j] = ds[j - 1] + 1
+      for (let k = 0; k < j - 1; ++k) {
+        if (getDist(cities[pathsToDraw[i][j]], cities[pathsToDraw[i][k]]) < reachDist && ds[k] + 1 < ds[j]) {
+          ds[j] = ds[k] + 1
+          ps[j] = k
+        }
+      }
+    }
+    let smoothPath = []
+    let ind = pathsToDraw[i].length - 1
+    while (ind != -1) {
+      smoothPath.push(pathsToDraw[i][ind])
+      ind = ps[ind]
+    }
+    pathsToDraw[i] = smoothPath.reverse()
+  }
+  for (let i = 0; i < pathsToDraw.length / 2; ++i) {
+    paths[i] = [...pathsToDraw[2 * i], ...[...pathsToDraw[2 * i + 1]].reverse().slice(1)]
+  }
   return {paths, pathsToDraw}
 }
 
@@ -113,6 +141,8 @@ function reverseWave(cities, startCity, finishCity) {
     if (cities[i].name == finishCity.name)
       finishCity = i
   }
+  if (typeof startCity != 'number' || typeof finishCity != 'number')
+    return {flow: null, avgDist: null, paths: [], pathsToDraw: []}
   for (let i = 0; i < cities.length; ++i) {
     g[i] = []
     visitedS[i] = false
@@ -122,12 +152,12 @@ function reverseWave(cities, startCity, finishCity) {
     pathT[i] = -1
     for (let j = 0; j < cities.length; ++j) {
       let dist = getDist(cities[i], cities[j])
-      if (i != j && dist < 100000) g[i].push(j)
+      if (i != j && dist < reachDist) g[i].push(j)
     }
   }
   for (let i = 0; i < cities.length; ++i)
     g[i].sort((a, b) => g[a].length > g[b].length)
-  let {paths, pathsToDraw} = bfs(startCity, finishCity),
+  let {paths, pathsToDraw} = bfs(cities, startCity, finishCity),
       flow = paths.length,
       avgDist = 0
   paths = paths.map(arr => arr.map(v => cities[v]))
