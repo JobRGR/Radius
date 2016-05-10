@@ -1,5 +1,6 @@
 import {EventEmitter} from 'events'
 import fetch from 'isomorphic-fetch'
+import citiesList from '../../server/modules/init/city'
 
 
 class Map extends EventEmitter {
@@ -19,10 +20,7 @@ class Map extends EventEmitter {
   load() {
     if (this.loading) return null
     this.loading = {}
-    fetch('/api/city', {method: 'get'})
-      .then(res => res.json())
-      .then(res => this.setMap(res))
-      .catch(err => console.log(err))
+    setTimeout(() => this.setMap({cities: citiesList}), 0)
   }
 
   get cachedMap() {

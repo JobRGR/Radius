@@ -11,6 +11,7 @@ const router = (
   <Router history={browserHistory}>
     <Route path='/' component={App}>
       <IndexRoute component={Index} />
+      <Route path='RadiusLocal' component={Index} />
     </Route>
   </Router>
 )
